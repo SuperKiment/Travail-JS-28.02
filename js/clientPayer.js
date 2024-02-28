@@ -136,7 +136,7 @@ function setupOptionsEcran3() {
                 optionSelectionnee = "Duo"
             }
 
-            console.log("Option : " + optionSelectionnee)
+            // console.log("Option : " + optionSelectionnee)
         })
     }
 
@@ -153,7 +153,7 @@ function setupOptionsEcran3() {
             optionSelectionnee = "Duo"
         }
 
-        console.log("Option : " + optionSelectionnee)
+        // console.log("Option : " + optionSelectionnee)
 
     })
 
