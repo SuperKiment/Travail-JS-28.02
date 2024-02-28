@@ -1,8 +1,8 @@
-let numeroPage = 3
+let numeroPage = 1
 const pages = []
-let forfaitSelectionne = -1
-let nombreAnnonces = 0
-let optionSelectionnee = ""
+let forfaitSelectionne = 1
+let nombreAnnonces = 1
+let optionSelectionnee = 1
 
 function updatePages() {
     for (let page of pages) {
@@ -22,6 +22,10 @@ function setupBouttons() {
                 // console.log("Boutton clicked :", nomBoutton)
                 numeroPage++;
                 updatePages()
+
+                if (boutonOK.id == "btEcran3") {
+                    setupRecupEcran4()
+                }
             })
         }
     }
@@ -101,8 +105,6 @@ function setupAnnoncesEcran2() {
 
 }
 
-
-
 function setupOptionsEcran3() {
 
     const estSelectionne = (option) => {
@@ -111,8 +113,6 @@ function setupOptionsEcran3() {
 
     const ecran = pages[2]
     const options = ecran.querySelectorAll('div')
-
-    const nomsOptions = ["Duplique", "Auto"]
 
     //Les deux premières options
     for (let i = 0; i < options.length - 1; i++) {
@@ -124,7 +124,7 @@ function setupOptionsEcran3() {
                 optionSimple.style.backgroundColor = "white"
                 optionSelectionnee = ""
             } else {
-                optionSelectionnee = nomsOptions[i]
+                optionSelectionnee = i + 1
                 optionSimple.style.backgroundColor = "red"
                 options[2].style.backgroundColor = "white"
             }
@@ -133,7 +133,7 @@ function setupOptionsEcran3() {
                 options[0].style.backgroundColor = "white"
                 options[1].style.backgroundColor = "white"
                 options[2].style.backgroundColor = "red"
-                optionSelectionnee = "Duo"
+                optionSelectionnee = 3
             }
 
             // console.log("Option : " + optionSelectionnee)
@@ -150,7 +150,7 @@ function setupOptionsEcran3() {
             options[2].style.backgroundColor = "red"
             options[0].style.backgroundColor = "white"
             options[1].style.backgroundColor = "white"
-            optionSelectionnee = "Duo"
+            optionSelectionnee = 3
         }
 
         // console.log("Option : " + optionSelectionnee)
@@ -158,6 +158,87 @@ function setupOptionsEcran3() {
     })
 
     console.log(options)
+
+}
+
+function setupRecupEcran4() {
+    const ecran = pages[3]
+    const annonce = pages[0].querySelectorAll("div")[forfaitSelectionne].querySelector("tr")
+    const recaps = ecran.querySelectorAll("div")
+
+    recaps[0].innerHTML = ''
+    recaps[0].append(annonce)
+
+    recaps[1].querySelector("span").textContent = nombreAnnonces
+
+    for (let i = 1; i <= 3; i++) {
+        // console.log("recapOption" + i)
+        ecran.querySelector("#recapOption" + i).style.display = 'none'
+    }
+
+    // console.log("option : "+"#recapOption" + (optionSelectionnee))
+    const optionElement = ecran.querySelector("#recapOption" + (optionSelectionnee))
+    optionElement.style.display = 'block'
+
+    //Prix option
+    const prixOptionTemp = optionElement.querySelector("span").textContent.split("€")[0].split(",")
+    const prixOption = parseFloat(prixOptionTemp[0]) + parseFloat(prixOptionTemp[1]) / 100
+    console.log(prixOption)
+
+    //Spans
+    const prixTotal = recaps[5].querySelector("#prixTotal")
+    const finalQuantite = recaps[5].querySelector("#finalQuantite")
+    const optionsRecap = recaps[5].querySelector("#optionsRecap")
+    const dateValable = ecran.querySelector("#dateValable")
+
+    //Prix Annonce
+    const prixString = annonce.querySelector("td").textContent.split("€")[0].split(",")
+    const vraiPrixAnnonce = parseFloat(prixString[0]) + parseFloat(prixString[1] / 100)
+
+    //Date
+    const date = new Date()
+    const annonceTitre = annonce.querySelector("h3").textContent
+
+    let anApres = parseInt(date.getFullYear())
+    let moisApres = parseInt(date.getMonth());
+
+    console.log(annonceTitre.split(" ")[1])
+
+    if (annonceTitre.split(" ")[1] == "Mois") {
+        moisApres += parseInt(annonceTitre.split(" ")[0])
+        console.log("mois choisi")
+        moisApres %= 13
+        if (moisApres == 0) {
+            moisApres++
+            anApres++
+        }
+    } else {
+        console.log("an choisi")
+        anApres++
+        
+    }
+    // const anApres;
+
+    dateValable.textContent = `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} au ${date.getDate()}/${moisApres}/${anApres} (${annonceTitre}).`
+
+
+    //Calculs
+    finalQuantite.textContent = nombreAnnonces
+    prixTotal.textContent = nombreAnnonces * vraiPrixAnnonce + prixOption
+
+    //Option tout en bas
+    switch (optionSelectionnee) {
+        case 1:
+            optionsRecap.textContent = "Duplique"
+            break;
+        case 2:
+            optionsRecap.textContent = "Auto 96H"
+            break;
+        case 3:
+            optionsRecap.textContent = "Duplique, Auto 96H (Duo)"
+            break;
+    }
+
 
 }
 
@@ -173,6 +254,8 @@ window.addEventListener("load", () => {
     setupAnnoncesEcran2()
 
     setupOptionsEcran3()
+
+    // setupRecupEcran4()
 
     updatePages()
 })
