@@ -1,6 +1,7 @@
-let numeroPage = 2
+let numeroPage = 3
 const pages = []
 let forfaitSelectionne = -1
+let nombreAnnonces = 0
 
 function updatePages() {
     for (let page of pages) {
@@ -17,7 +18,7 @@ function setupBouttons() {
 
         if (boutonOK != null) {
             boutonOK.addEventListener("click", () => {
-                console.log("Boutton clicked :", nomBoutton)
+                // console.log("Boutton clicked :", nomBoutton)
                 numeroPage++;
                 updatePages()
             })
@@ -30,7 +31,7 @@ function setupBouttons() {
 
         if (boutonOK != null) {
             boutonOK.addEventListener("click", () => {
-                console.log("Boutton clicked :", nomBoutton)
+                // console.log("Boutton clicked :", nomBoutton)
                 numeroPage--;
                 updatePages()
             })
@@ -60,8 +61,8 @@ function setupSelectionEcran1() {
     const bouttonOk = ecran.querySelector("button")
     const forfaits = ecran.querySelectorAll("div")
 
-    bouttonOk.style.display = "none"
-    
+    bouttonOk.disabled = true
+
     for (let i = 0; i < forfaits.length; i++) {
 
         const forfait = forfaits[i]
@@ -77,16 +78,27 @@ function setupSelectionEcran1() {
             }
 
             if (forfaitSelectionne >= 0)
-                bouttonOk.style.display = "unset"
-            else bouttonOk.style.display = "none"
-
+                bouttonOk.disabled = false
+            else bouttonOk.disabled = true
         })
     }
 
-    console.log(forfaits)
+    // console.log(forfaits)
 
 }
 
+function setupAnnoncesEcran2() {
+    const ecran = pages[1]
+    const inputNb = ecran.querySelector('#inputNb')
+    const bouttonOk = ecran.querySelector('#btEcran2')
+
+    bouttonOk.disabled = true
+
+    inputNb.addEventListener('change', () => bouttonOk.disabled = !parseInt(nombreAnnonces = (inputNb.value >= 0 ? inputNb.value : 0)) > 0) //EN UNE SEULE LIGNE B)
+
+    // console.log(inputNb)
+
+}
 
 window.addEventListener("load", () => {
     console.log("début")
