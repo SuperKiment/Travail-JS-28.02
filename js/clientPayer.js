@@ -2,6 +2,7 @@ let numeroPage = 3
 const pages = []
 let forfaitSelectionne = -1
 let nombreAnnonces = 0
+let optionSelectionnee = ""
 
 function updatePages() {
     for (let page of pages) {
@@ -100,6 +101,66 @@ function setupAnnoncesEcran2() {
 
 }
 
+
+
+function setupOptionsEcran3() {
+
+    const estSelectionne = (option) => {
+        return option.style.backgroundColor == "red"
+    }
+
+    const ecran = pages[2]
+    const options = ecran.querySelectorAll('div')
+
+    const nomsOptions = ["Duplique", "Auto"]
+
+    //Les deux premières options
+    for (let i = 0; i < options.length - 1; i++) {
+        const optionSimple = options[i]
+
+        optionSimple.addEventListener('click', () => {
+
+            if (estSelectionne(optionSimple)) {
+                optionSimple.style.backgroundColor = "white"
+                optionSelectionnee = ""
+            } else {
+                optionSelectionnee = nomsOptions[i]
+                optionSimple.style.backgroundColor = "red"
+                options[2].style.backgroundColor = "white"
+            }
+
+            if (estSelectionne(options[0]) && estSelectionne(options[1])) {
+                options[0].style.backgroundColor = "white"
+                options[1].style.backgroundColor = "white"
+                options[2].style.backgroundColor = "red"
+                optionSelectionnee = "Duo"
+            }
+
+            console.log("Option : " + optionSelectionnee)
+        })
+    }
+
+    //La dernière option
+    options[2].addEventListener("click", () => {
+
+        if (estSelectionne(options[2])) {
+            options[2].style.backgroundColor = "white"
+            optionSelectionnee = ""
+        } else {
+            options[2].style.backgroundColor = "red"
+            options[0].style.backgroundColor = "white"
+            options[1].style.backgroundColor = "white"
+            optionSelectionnee = "Duo"
+        }
+
+        console.log("Option : " + optionSelectionnee)
+
+    })
+
+    console.log(options)
+
+}
+
 window.addEventListener("load", () => {
     console.log("début")
 
@@ -110,6 +171,8 @@ window.addEventListener("load", () => {
     setupSelectionEcran1()
 
     setupAnnoncesEcran2()
+
+    setupOptionsEcran3()
 
     updatePages()
 })
