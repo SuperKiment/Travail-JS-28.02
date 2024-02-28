@@ -1,5 +1,6 @@
-let numeroPage = 1
+let numeroPage = 2
 const pages = []
+let forfaitSelectionne = -1
 
 function updatePages() {
     for (let page of pages) {
@@ -56,11 +57,29 @@ function trouverEcrans() {
 
 function setupSelectionEcran1() {
     const ecran = pages[0]
+    const bouttonOk = ecran.querySelector("button")
     const forfaits = ecran.querySelectorAll("div")
 
-    for (let forfait of forfaits) {
+    bouttonOk.style.display = "none"
+    
+    for (let i = 0; i < forfaits.length; i++) {
+
+        const forfait = forfaits[i]
+
         forfait.addEventListener("click", () => {
-            forfait.style.backgroundColor = "red"
+            for (let forfTemp of forfaits) forfTemp.style.backgroundColor = "white"
+
+            if (i != forfaitSelectionne) {
+                forfait.style.backgroundColor = "red"
+                forfaitSelectionne = i
+            } else {
+                forfaitSelectionne = -1
+            }
+
+            if (forfaitSelectionne >= 0)
+                bouttonOk.style.display = "unset"
+            else bouttonOk.style.display = "none"
+
         })
     }
 
@@ -77,6 +96,8 @@ window.addEventListener("load", () => {
     setupBouttons()
 
     setupSelectionEcran1()
+
+    setupAnnoncesEcran2()
 
     updatePages()
 })
